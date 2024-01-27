@@ -1,10 +1,12 @@
 package Heap;
 
+import Heap.Tasks.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class MeTiranHeap<T extends Comparable<T>> {
-    private final List<T> heap;
+public class MeTiranHeap {
+    private final List<Task> heap;
 
     public MeTiranHeap() {
         this.heap = new ArrayList<>();
@@ -34,25 +36,25 @@ public class MeTiranHeap<T extends Comparable<T>> {
         return getRightChildIndex(index) < heap.size();
     }
 
-    private T getParent(int index) {
+    private Task getParent(int index) {
         return heap.get(getParentIndex(index));
     }
 
-    private T getLeftChild(int index) {
+    private Task getLeftChild(int index) {
         return heap.get(getLeftChildIndex(index));
     }
 
-    private T getRightChild(int index) {
+    private Task getRightChild(int index) {
         return heap.get(getRightChildIndex(index));
     }
 
     private void swap(int index1, int index2) {
-        T temp = heap.get(index1);
+        Task temp = heap.get(index1);
         heap.set(index1, heap.get(index2));
         heap.set(index2, temp);
     }
 
-    public void insert(T value) {
+    public void insert(Task value) {
         // Insert the new element at the end of the array
         heap.add(value);
 
@@ -69,14 +71,14 @@ public class MeTiranHeap<T extends Comparable<T>> {
         }
     }
 
-    public T extractMin() {
+    public Task extractMin() {
         if (heap.isEmpty()) {
             // Heap is empty
             return null; // or throw an exception
         }
 
         // Extract the minimum element (at the root)
-        T min = heap.get(0);
+        Task min = heap.get(0);
 
         // Replace the root with the last element in the heap
         heap.set(0, heap.get(heap.size() - 1));
