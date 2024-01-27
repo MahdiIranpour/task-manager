@@ -1,0 +1,110 @@
+package Heap;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MeTiranHeap<T extends Comparable<T>> {
+    private final List<T> heap;
+
+    public MeTiranHeap() {
+        this.heap = new ArrayList<>();
+    }
+
+    private int getParentIndex(int index) {
+        return (index - 1) / 2;
+    }
+
+    private int getLeftChildIndex(int index) {
+        return 2 * index + 1;
+    }
+
+    private int getRightChildIndex(int index) {
+        return 2 * index + 2;
+    }
+
+    private boolean hasParent(int index) {
+        return getParentIndex(index) >= 0;
+    }
+
+    private boolean hasLeftChild(int index) {
+        return getLeftChildIndex(index) < heap.size();
+    }
+
+    private boolean hasRightChild(int index) {
+        return getRightChildIndex(index) < heap.size();
+    }
+
+    private T getParent(int index) {
+        return heap.get(getParentIndex(index));
+    }
+
+    private T getLeftChild(int index) {
+        return heap.get(getLeftChildIndex(index));
+    }
+
+    private T getRightChild(int index) {
+        return heap.get(getRightChildIndex(index));
+    }
+
+    private void swap(int index1, int index2) {
+        T temp = heap.get(index1);
+        heap.set(index1, heap.get(index2));
+        heap.set(index2, temp);
+    }
+
+    public void insert(T value) {
+        // Insert the new element at the end of the array
+        heap.add(value);
+
+        // Fix the min-heap property by bubbling up the newly inserted element
+        heapifyUp();
+    }
+
+    private void heapifyUp() {
+        int index = heap.size() - 1;
+
+        while (hasParent(index) && getParent(index).compareTo(heap.get(index)) > 0) {
+            swap(index, getParentIndex(index));
+            index = getParentIndex(index);
+        }
+    }
+
+    public T extractMin() {
+        if (heap.isEmpty()) {
+            // Heap is empty
+            return null; // or throw an exception
+        }
+
+        // Extract the minimum element (at the root)
+        T min = heap.get(0);
+
+        // Replace the root with the last element in the heap
+        heap.set(0, heap.get(heap.size() - 1));
+        heap.remove(heap.size() - 1);
+
+        // Fix the min-heap property by bubbling down the root
+        heapifyDown();
+
+        return min;
+    }
+
+    private void heapifyDown() {
+        int index = 0;
+
+        while (hasLeftChild(index)) {
+            int smallerChildIndex = getLeftChildIndex(index);
+
+            if (hasRightChild(index) && getRightChild(index).compareTo(getLeftChild(index)) < 0) {
+                smallerChildIndex = getRightChildIndex(index);
+            }
+
+            if (heap.get(index).compareTo(heap.get(smallerChildIndex)) < 0) {
+                break;
+            } else {
+                swap(index, smallerChildIndex);
+            }
+
+            index = smallerChildIndex;
+        }
+    }
+}
