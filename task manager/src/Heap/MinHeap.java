@@ -94,6 +94,16 @@ public class MinHeap {
         return min;
     }
 
+    public Task getMin() {
+        if (heap.isEmpty()) {
+            // Heap is empty
+            return null; // or throw an exception
+        }
+
+        // Extract the minimum element (at the root)
+        return heap.get(0);
+    }
+
     private void heapifyDown() {
         int index = 0;
 
@@ -113,4 +123,65 @@ public class MinHeap {
             index = smallerChildIndex;
         }
     }
+
+    public void inOrderTraversal() {
+        inOrderTraversal(0);
+    }
+
+    private void inOrderTraversal(int index) {
+        if (index < heap.size()) {
+            inOrderTraversal(getLeftChildIndex(index));  // Visit left child
+            System.out.println(heap.get(index));         // Visit current node (print)
+            inOrderTraversal(getRightChildIndex(index)); // Visit right child
+        }
+    }
+ /*   public void delete(Task value) {
+        int index = heap.indexOf(value);
+
+        if (index == -1) {
+            // Element not found in the heap
+            return;
+        }
+
+        // Replace the element to be deleted with the last element in the heap
+        heap.set(index, heap.get(heap.size() - 1));
+        heap.remove(heap.size() - 1);
+
+        // Fix the min-heap property by checking both upward and downward
+        heapifyUp(index);
+        heapifyDown(index);
+    }
+
+    // Modified heapifyUp to allow specifying the starting index
+    private void heapifyUp(int startIndex) {
+        int index = startIndex;
+
+        while (hasParent(index) && getParent(index).compareTo(heap.get(index)) > 0) {
+            swap(index, getParentIndex(index));
+            index = getParentIndex(index);
+        }
+    }
+
+    // Modified heapifyDown to allow specifying the starting index
+    private void heapifyDown(int startIndex) {
+        int index = startIndex;
+
+        while (hasLeftChild(index)) {
+            int smallerChildIndex = getLeftChildIndex(index);
+
+            if (hasRightChild(index) && getRightChild(index).compareTo(getLeftChild(index)) < 0) {
+                smallerChildIndex = getRightChildIndex(index);
+            }
+
+            if (heap.get(index).compareTo(heap.get(smallerChildIndex)) < 0) {
+                break;
+            } else {
+                swap(index, smallerChildIndex);
+            }
+
+            index = smallerChildIndex;
+        }
+    }
+
+  */
 }

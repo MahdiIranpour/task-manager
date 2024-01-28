@@ -1,17 +1,28 @@
 package Heap.Tasks;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Subtask implements Comparable {
 
     private final String name;
+
+    @Override
+    public String toString() {
+        return "Subtask{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", deadline=" + deadline.toString() +
+                ", status=" + status +
+                '}';
+    }
+
     private final String description;
-    private final Date deadline;
-    private Status status;      // can be "to do" or "done"
+    private final LocalDateTime deadline;
+    private String status;      // can be "to do" or "done"
     private final Task task;
 
     /** require name of task, description, deadline and status*/
-    public Subtask(String name, String description, Date deadline, Status status, Task task) {
+    public Subtask(String name, String description, LocalDateTime deadline, String status, Task task) {
         this.name = name;
         this.description = description;
         this.deadline = deadline;
@@ -30,17 +41,17 @@ public class Subtask implements Comparable {
     }
 
     /**gets deadline date of subtask*/
-    public Date getDeadline() {
+    public LocalDateTime getDeadline() {
         return deadline;
     }
 
     /**gets status of subtask*/
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
     /**sets status of subtask*/
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

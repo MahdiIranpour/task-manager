@@ -3,10 +3,10 @@ import Heap.Tasks.Status;
 import Heap.Tasks.Subtask;
 import Heap.Tasks.Task;
 
-import java.io.*;
-import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-
+import java.util.Scanner;
 
 public class Main {
 
@@ -14,67 +14,119 @@ public class Main {
 
     public static void main(String[] args) {
 
-        try (FileInputStream fis = new FileInputStream(""); InputStreamReader isr = new InputStreamReader(fis); BufferedReader reader = new BufferedReader(isr))
-        {
+//        try (FileInputStream fis = new FileInputStream(""); InputStreamReader isr = new InputStreamReader(fis); BufferedReader reader = new BufferedReader(isr))
+//        {
+//
+//            String line;
+//            while ((line = reader.readLine()) != null){
+//
+//                String [] words = line.split(" ");
+//
+//                switch (words[0]){
+//                    case "add" ->{
+//                        adding(words[1], line);
+//                    }
+//                    case "subDone" ->{
+//                        setSubtaskStatus(line);
+//                    }
+//                    case "taskDone"-> {
+//                        setDoneTask(words[1]);
+//                    }
+//                }
+//            }
+//
+//        } catch (IOException e) {
+//            print(e.getMessage());
+//        }
 
-            String line;
-            while ((line = reader.readLine()) != null){
+        Scanner sc = new Scanner(System.in);
 
-                String [] words = line.split(" ");
+        String line;
+        while (sc.hasNext()) {
 
-                switch (words[0]){
-                    case "add" ->{
-                        adding(words[1], line);
-                    }
-                    case "done" ->{
-                        setSubtaskStatus(line);
-                    }
-                }
+            line = sc.nextLine();
+            String[] words = line.split(" ");
+
+            switch (words[0]) {
+                case "add" -> adding(words[1], line);
+                case "subDone" -> setSubtaskStatus(line);
+                case "taskDone" -> setDoneTask(words[1]);
+                case "show" -> printHeap();
+                case "first" -> print(tasks.getMin().toString());
             }
-
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
         }
+    }
 
+    private static void setDoneTask(String taskName) {
+
+        Task t;
+        if (Objects.equals((t = tasks.getMin()).getName(), taskName)) {
+
+            if (t.highestSubtask() == null) {
+
+                tasks.extractMin();
+                print("task " + t.getName() + " Done!");
+            } else
+                print("still there is a subtask to do for" + taskName);
+        } else
+            print("this task is not in highest priority");
     }
 
     private static void setSubtaskStatus(String line) {
 
-        String woDone = line.substring(5);
-        String[] words = woDone.split(",");
+        String woDone = line.substring(8);
+        String[] words = woDone.split(",\\s");
 
-        Task task = findTask(words[0]);
+        Task task = findTask(words[1]);
         if (task != null) {
-            Subtask subtask = task.findSubtask(words[1]);
 
-            if (subtask != null)
-                task.setDoneSubtask(subtask);
-        }
+            if (tasks.getMin() == task ){
+                Subtask subtask = task.findSubtask(words[0]);
+
+                if (subtask != null) {
+                    if (task.highestSubtask() == subtask) {
+
+                        task.setDoneSubtask(subtask);
+                        print(subtask.getName() + " done!");
+
+                        setDoneTask(task.getName());
+                    } else
+                        print("subtask is not in highest priority");
+                } else
+                    print("subtask is not found");
+            } else
+                print("task is not in highest priority");
+        } else
+            print("task is not found");
     }
 
     private static void adding(String taskType, String line) {
 
-        switch (taskType){
+        switch (taskType) {
 
-            case "task" -> {
-                addTask(line);
-            }
-            case "subTask" -> {
-                addSubTask(line);
-            }
+            case "task" -> addTask(line);
+            case "subtask" -> addSubTask(line);
         }
     }
 
     private static void addSubTask(String line) {
         String actualTask = line.substring(12);
 
-        String [] words = actualTask.split(",");
+        String[] words = actualTask.split(", ");
 
         Task task = findTask(words[4]);
 
-        if(!(task == null)) {
+        if (!(task == null)) {
 
-            Subtask subtask = new Subtask(words[0], words[1], Date.valueOf(words[2]), Status.valueOf(words[3]), task);
+
+            // Define the desired date format
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+
+            // Parse the string into a LocalDate object
+            LocalDateTime parsedDate = LocalDateTime.parse(words[2], formatter);
+
+
+            Subtask subtask = new Subtask(words[0], words[1], parsedDate, words[3], task);
 
             task.addSubTask(subtask);
         }
@@ -82,8 +134,8 @@ public class Main {
 
     private static Task findTask(String TaskName) {
 
-        for (Task t : tasks.getHeap()){
-            if (Objects.equals(t.getName(), TaskName)){
+        for (Task t : tasks.getHeap()) {
+            if (Objects.equals(t.getName(), TaskName)) {
                 return t;
             }
         }
@@ -94,10 +146,27 @@ public class Main {
 
         String actualTask = line.substring(9);
 
-        String [] words = actualTask.split(",");
+        String[] words = actualTask.split(", ");
 
-        Task task = new Task(words[0], words[1], Date.valueOf( words[2]), Status.valueOf(words[3]));
+        // Define the desired date format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+
+        // Parse the string into a LocalDate object
+        LocalDateTime parsedDate = LocalDateTime.parse(words[2], formatter);
+
+        Task task = new Task(words[0], words[1], parsedDate, words[3]);
 
         tasks.insert(task);
+    }
+
+    static void printHeap() {
+
+        for (Task t : tasks.getHeap()) {
+            System.out.println(t.toString());
+        }
+    }
+
+    static void print(String line) {
+        System.out.println(line);
     }
 }

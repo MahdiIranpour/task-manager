@@ -1,6 +1,7 @@
 package Heap.Tasks;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -8,12 +9,12 @@ public class Task implements Comparable {
 
     private final String name;
     private final String description;
-    private final Date deadline;
-    private Status status;      // can be "to do" or "done"
+    private final LocalDateTime deadline;
+    private String status;      // can be "to do" or "done"
     private final LinkedList<Subtask> subtasks;
 
     /** require name of task, description, deadline and status*/
-    public Task(String name, String description, Date deadline, Status status) {
+    public Task(String name, String description, LocalDateTime deadline, String status) {
         this.name = name;
         this.description = description;
         this.deadline = deadline;
@@ -25,6 +26,7 @@ public class Task implements Comparable {
     /**adds a subtask for this task to the list of subtasks*/
     public void addSubTask(Subtask subTask) {
         subtasks.add(subTask);
+        subtasks.sort(Subtask::compareTo);
     }
 
     /** get name of task*/
@@ -38,17 +40,17 @@ public class Task implements Comparable {
     }
 
     /** get deadline of task*/
-    public Date getDeadline() {
+    public LocalDateTime getDeadline() {
         return deadline;
     }
 
     /** get status of task*/
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
     /** sets status of task*/
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -78,15 +80,24 @@ public class Task implements Comparable {
         return "Task{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", deadline=" + deadline +
+                ", deadline=" + deadline.toString() +
                 ", status=" + status +
-                ", subTasks=" + subtasks.toString() +
+                ", subTasks=" + subtasks +
                 '}';
     }
 
     public void setDoneSubtask(Subtask subtask) {
-        if ((findSubtask(subtask.getName() ))!= null) {
-            subtask.setStatus(Status.DONE);
+        if ((findSubtask(subtask.getName() )) != null) {
+            subtask.setStatus("done");
         }
+    }
+
+    public Subtask highestSubtask() {
+
+        for (Subtask subtask: subtasks){
+            if (Objects.equals(subtask.getStatus(), "to do"))
+                return subtask;
+        }
+        return null;
     }
 }
