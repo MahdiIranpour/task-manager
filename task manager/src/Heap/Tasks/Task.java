@@ -86,6 +86,7 @@ public class Task implements Comparable {
                 '}';
     }
 
+    /**set a subTask done*/
     public void setDoneSubtask(Subtask subtask) {
         if ((findSubtask(subtask.getName() )) != null) {
             subtask.setStatus("done");
