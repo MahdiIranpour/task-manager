@@ -8,13 +8,15 @@ public class Subtask implements Comparable {
     private final String description;
     private final Date deadline;
     private Status status;      // can be "to do" or "done"
+    private final Task task;
 
     /** require name of task, description, deadline and status*/
-    public Subtask(String name, String description, Date deadline, Status status) {
+    public Subtask(String name, String description, Date deadline, Status status, Task task) {
         this.name = name;
         this.description = description;
         this.deadline = deadline;
         this.status = status;
+        this.task = task;
     }
 
     /**gets name of subtask*/
@@ -47,5 +49,9 @@ public class Subtask implements Comparable {
         Subtask that = (Subtask) o;
 
         return this.deadline.compareTo(that.deadline);
+    }
+
+    public Task getTask() {
+        return task;
     }
 }

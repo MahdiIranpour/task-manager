@@ -5,10 +5,10 @@ import Heap.Tasks.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MeTiranHeap {
+public class MinHeap {
     private final List<Task> heap;
 
-    public MeTiranHeap() {
+    public MinHeap() {
         this.heap = new ArrayList<>();
     }
 
@@ -46,6 +46,10 @@ public class MeTiranHeap {
 
     private Task getRightChild(int index) {
         return heap.get(getRightChildIndex(index));
+    }
+
+    public List<Task> getHeap() {
+        return heap;
     }
 
     private void swap(int index1, int index2) {
