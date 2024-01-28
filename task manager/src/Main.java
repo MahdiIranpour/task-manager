@@ -1,8 +1,12 @@
 import Heap.MinHeap;
-import Heap.Tasks.Status;
+
 import Heap.Tasks.Subtask;
 import Heap.Tasks.Task;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -51,7 +55,23 @@ public class Main {
                 case "taskDone" -> setDoneTask(words[1]);
                 case "show" -> printHeap();
                 case "first" -> print(tasks.getMin().toString());
+                case "save" -> save();
             }
+        }
+    }
+
+    private static void save() {
+        try(FileOutputStream fos = new FileOutputStream("save.txt",false);
+            OutputStreamWriter osw = new OutputStreamWriter(fos);
+            BufferedWriter writer = new BufferedWriter(osw)){
+
+            for (Task task : tasks.getHeap()){
+                writer.write(task.toString());
+                writer.newLine();
+            }
+            System.out.println("Saved!");
+        } catch (IOException e){
+            System.out.println(e.getMessage());
         }
     }
 

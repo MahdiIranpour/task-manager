@@ -1,8 +1,9 @@
 package Heap.Tasks;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Subtask implements Comparable {
+public class Subtask implements Comparable, Serializable {
 
     private final String name;
 

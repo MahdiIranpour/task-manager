@@ -1,11 +1,12 @@
 package Heap.Tasks;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.Objects;
 
-public class Task implements Comparable {
+public class Task implements Comparable, Serializable {
 
     private final String name;
     private final String description;
