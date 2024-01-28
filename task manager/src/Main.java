@@ -41,6 +41,7 @@ public class Main {
         //     print(e.getMessage());
         // }
 
+
         Scanner sc = new Scanner(System.in);
 
         String line;
@@ -143,6 +144,8 @@ public class Main {
             // Define the desired date format
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
 
+            words[2] = trueDate(words[2]);
+
             // Parse the string into a LocalDate object
             LocalDateTime parsedDate = LocalDateTime.parse(words[2], formatter);
 
@@ -173,6 +176,7 @@ public class Main {
         // Define the desired date format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
 
+        words[2] = trueDate(words[2]);
         // Parse the string into a LocalDate object
         LocalDateTime parsedDate = LocalDateTime.parse(words[2], formatter);
 
@@ -192,5 +196,22 @@ public class Main {
     // Print a line to the console
     static void print(String line) {
         System.out.println(line);
+    }
+
+    //fix the format of date
+    private static String trueDate(String date) {
+
+        String [] words = date.split(" ");
+
+        String [] parts = words[0].split("/");
+
+        if (parts[1].length() == 1) {
+            parts[1] = "0" + parts[1];
+        }
+        if (parts[2].length() == 1) {
+            parts[2] = "0" + parts[2];
+        }
+
+        return parts[0] + "/" + parts[1] + "/" + parts[2]+" "+  words[1];
     }
 }
